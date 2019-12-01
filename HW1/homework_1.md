@@ -1,6 +1,7 @@
 # interesting big data problem：
 ## 1
 How many airlines are there（UniqueCarrier）？(data please see homework1_test.csv)
+
 select UniqueCarrier, count（\*） from statistics group by UniqueCarrier;
 ![image](https://github.com/Phyllislai12/1801212867-PHBS_BIGDATA_2019/blob/master/photo/hw1-5.png)
 
