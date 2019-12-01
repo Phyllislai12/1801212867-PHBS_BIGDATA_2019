@@ -9,8 +9,7 @@
 
 # 1
 How many airlines are there（UniqueCarrier）？
-select UniqueCarrier,count(*) from statistics group by UniqueCarrier;
-
+select UniqueCarrier,count （*）* from statistics group by UniqueCarrier;
 ！[image](https://github.com/Phyllislai12/1801212867-PHBS_BIGDATA_2019/blob/master/photo/hw1-5.png)
 
 # 2
