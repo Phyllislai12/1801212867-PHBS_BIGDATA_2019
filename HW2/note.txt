@@ -1,0 +1,10 @@
+The applicable condition of general linear regression is that the number of samples should be larger than the number of features
+The most significant is Aerosols, others are TSI>MEI>N2O
+There is a linear correlation between the coefficients of X samples, namely multicollinearity. At this point, the inverse matrix is very unstable, and the results obtained are biased
+
+The P2
+Loss function for linear model with L1 regularization:JR(w)=0.5*|y?Xw|**2 +λ∑|wi| 
+Loss function for linear model with L2 regularization:JR(w)=0.5*|y?Xw|**2 +0.5* λ|w|**2  
+
+L2 regularization eliminates collinearity between features by increasing penalty functions. It can be understood as adding an L2 regular term to the linear regression loss function to limit the theta. By determining the value of lamida
+The model can be balanced between bias and variance.
