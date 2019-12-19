@@ -4,6 +4,7 @@ import numpy as np
 from sklearn import linear_model
 import matplotlib.pyplot as pyplot
 
+# Problem 1&2
 
 def closed_form_1():
     dataset = pd.read_csv("./data/climate_change_1.csv")
@@ -195,4 +196,128 @@ closed_form_2()
     
     
     
+# Problem 3    
+import numpy as np
+import pandas as pd
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from sklearn import linear_model
+
+ 
+def vif(X, thres=10.0):
+    col = list(range(X.shape[1]))
+    dropped = True
+    while dropped:
+        dropped = False
+        vif = [variance_inflation_factor(X.iloc[:,col].values, ix) for ix in range(X.iloc[:,col].shape[1])]
+        maxvif = max(vif)
+        maxix = vif.index(maxvif)
+        if maxvif > thres:
+            del col[maxix]
+            print('delete=',X.columns[col[maxix]],'  ', 'vif=',maxvif )
+            dropped = True
+    print('Remain Variables:', list(X.columns[col]))
+    print('VIF:', vif)
+    return list(X.columns[col]) 
+
+dataset = pd.read_csv("./data/climate_change_1.csv")
+X = dataset.get(["MEI","CO2","CH4","N2O","CFC-11","CFC-12","TSI","Aerosols"])
+
+y = dataset.get("Temp")
+
+X_train = X[:284]
+X_test = X[284:]
+y_train = y[:284]
+y_test = y[284:]
+d = vif(X_train)
+print(d)
+
+X = dataset.get( ['MEI', 'CFC-12', 'Aerosols'])
+y = dataset.get("Temp")
+X_train = X[:284]
+X_test = X[284:]
+y_train = y[:284]
+y_test = y[284:]
+
+regr = linear_model.LinearRegression()
+regr.fit(X_train,y_train)
+print('coefficients(b1,b2...):',regr.coef_)
+print('intercept(b0):',regr.intercept_)
+y_train_pred = regr.predict(X_train)
+       
+R2_1 = regr.score(X_train, y_train)
+print(R2_1)
+R2_2 = regr.score(X_test, y_test)
+print(R2_2)
+
+
+
+
+# Problem 4
+#encoding:utf-8
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+def costFunc(X,Y,theta):
+    #cost func
+    inner=np.power((X*theta.T)-Y,2)
+    return np.sum(inner)/(2*len(X))
+
+def gradientDescent(X,Y,theta,alpha,iters):
+    temp = np.mat(np.zeros(theta.shape))
+    cost = np.zeros(iters)
+    thetaNums = int(theta.shape[1])
     
+    for i in range(iters):
+        error = (X*theta.T-Y)
+        for j in range(thetaNums):
+            derivativeInner = np.multiply(error,X[:,j])
+            temp[0,j] = theta[0,j]-(alpha*np.sum(derivativeInner)/len(X))
+        theta = temp
+        cost[i]=costFunc(X,Y,theta)
+    return theta,cost
+
+
+dataset = pd.read_csv("./data/climate_change_1.csv")
+X = dataset.get(["MEI","CO2","CH4","N2O","CFC-11","CFC-12","TSI","Aerosols"])
+
+y = dataset.get("Temp")
+X = np.column_stack((np.ones(len(X)),X))
+X_train = X[:284]
+X_test = X[284:]
+y_train = y[:284]
+y_test = y[284:]
+
+X_train = np.mat(X_train)  
+Y_train = np.mat(y_train).T
+
+for i in range(1,9):
+    X_train[:,i] = (X_train[:,i] - min(X_train[:,i])) / (max(X_train[:,i]) - min(X_train[:,i]))
+
+theta_n = (X_train.T*X_train).I*X_train.T*Y_train
+print("theta =",theta_n)
+theta = np.mat([0,0,0,0,0,0,0,0,0])
+iters = 100000
+alpha = 0.001
+
+finalTheta,cost = gradientDescent(X_train,Y_train,theta,alpha,iters)
+print("final theta ",finalTheta)
+print("cost ",cost)
+
+# x_x0=[]*8
+# for i in range(8):
+#     x_x0[i] = np.linspace(X_train[:,i].min(),X_train[:,i].max(),100)
+# 
+# x_x0 = np.meshgrid(x_x0)
+# f = 0
+# for i in range(9):
+#     if i == 0:
+#         f += finalTheta[0,0]
+#     else:
+#         f += finalTheta[0,i]*x_x0[i]
+fig, bx = plt.subplots(figsize=(8,6))
+bx.plot(np.arange(iters), cost, 'r') 
+bx.set_xlabel('Iterations') 
+bx.set_ylabel('Cost') 
+bx.set_title('Error vs. Training Epoch') 
+plt.show()
