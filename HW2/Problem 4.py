@@ -3,6 +3,18 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+# The goal of optimization is to minimize the loss function. The gradient direction of the function represents the direction where the value of the function grows fastest.
+# So the opposite direction is the direction in which the function decreases the fastest. The optimal idea for gradient descent is to use the negative gradient of the current position
+# Direction as the search direction, also known as the "steepest descent method." Gradient descent method is an iterative algorithm, each step needs to solve the objective function and gradient vector.
+# steps:
+# 1. Find the gradient,
+# 2. Move in the direction opposite to the gradient, as follows, where, is the step size. If the step size is small enough, it can be guaranteed that every iteration is decreasing, but it may cause the convergence to be too slow. If the step size is too large, it cannot guarantee that every iteration is decreasing, nor can it guarantee the convergence.
+# 3. Loop iteration step 2, until the value changes so that the difference between the two iterations is small enough, such as 0.00000001. In other words, until the value calculated by the two iterations is basically unchanged, then the local minimum value has been reached.
+# 4. In this case, the output is the value that causes the function to be minimal
+# implementation process:
+# loss function
+
 def costFunc(X,Y,theta):
     #cost func
     inner=np.power((X*theta.T)-Y,2)
@@ -17,8 +29,8 @@ def gradientDescent(X,Y,theta,alpha,iters):
         error = (X*theta.T-Y)
         for j in range(thetaNums):
             derivativeInner = np.multiply(error,X[:,j])
-            temp[0,j] = theta[0,j]-(alpha*np.sum(derivativeInner)/len(X))
-        theta = temp
+            temp[0,j] = theta[0,j]-(alpha*np.sum(derivativeInner)/len(X))#Compute the theta matrix
+        theta = temp 
         cost[i]=costFunc(X,Y,theta)
     return theta,cost
 
@@ -42,27 +54,18 @@ for i in range(1,9):
 theta_n = (X_train.T*X_train).I*X_train.T*Y_train
 print("theta =",theta_n)
 theta = np.mat([0,0,0,0,0,0,0,0,0])
-iters = 100000
-alpha = 0.001
+iters = 100000 # The number of iterations
+alpha = 0.001 # learning rate
 
 finalTheta,cost = gradientDescent(X_train,Y_train,theta,alpha,iters)
 print("final theta ",finalTheta)
 print("cost ",cost)
 
-# x_x0=[]*8
-# for i in range(8):
-#     x_x0[i] = np.linspace(X_train[:,i].min(),X_train[:,i].max(),100)
-# 
-# x_x0 = np.meshgrid(x_x0)
-# f = 0
-# for i in range(9):
-#     if i == 0:
-#         f += finalTheta[0,0]
-#     else:
-#         f += finalTheta[0,i]*x_x0[i]
 fig, bx = plt.subplots(figsize=(8,6))
 bx.plot(np.arange(iters), cost, 'r') 
 bx.set_xlabel('Iterations') 
 bx.set_ylabel('Cost') 
 bx.set_title('Error vs. Training Epoch') 
 plt.show()
+# As the number of iterations increases, the loss function becomes smaller and smaller, the trend becomes more and more stable, and the optimal solution is approached at the same time
+    
