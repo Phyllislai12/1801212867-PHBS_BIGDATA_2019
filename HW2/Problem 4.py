@@ -48,7 +48,7 @@ y_test = y[284:]
 X_train = np.mat(X_train)  
 Y_train = np.mat(y_train).T
 
-#feature scaling
+# feature scaling
 
 for i in range(1,9):
     X_train[:,i] = (X_train[:,i] - min(X_train[:,i])) / (max(X_train[:,i]) - min(X_train[:,i]))
