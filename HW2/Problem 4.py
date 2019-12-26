@@ -71,3 +71,4 @@ bx.set_title('Error vs. Training Epoch')
 plt.show()
 # As the number of iterations increases, the loss function becomes smaller and smaller, the trend becomes more and more stable, and the optimal solution is approached at the same time
     
+# When the data is iterated for 32 times, it will produce a data of 30 length. This data is too accurate to report errors, but it will be confused later（数据在迭代32次的时候会产生一个30长度的数据，这个数据超精度了，不会报错，但是后面乱算了）
